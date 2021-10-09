@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2991b258a5b075042ad2014481bd4f8c
+guid: 67e073a65eee3d54b8b26bcdeea7281c
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Tovari Sans
+  - Positive System
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

@@ -25,8 +25,8 @@ public class TerrainController : MonoBehaviour
             SpawnNewTerrain();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            SpawnNewTerrain();
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    SpawnNewTerrain();
     }
 
     void SpawnNewTerrain()
