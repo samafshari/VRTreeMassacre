@@ -3,24 +3,35 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class Player : MonoBehaviour
 {
+    public static bool IsPlaying;
+
+    public AudioClip DeathSound;
+    public AudioClip MenuMusic;
+    public AudioClip GameMusic;
+
+    const float moveRange = 1;
     float moveSpeed = 0.1f;
     bool isAlive = true;
     AudioSource audioSource;
     MeshRenderer mshBlammo, mshDeathlight, mshTime;
     TextMesh txtTime;
-    public AudioClip DeathSound;
     float time;
     int seconds;
     int high;
-
-    public static bool IsPlaying;
-
+    LineRenderer[] lineRenderers;
     // Start is called before the first frame update
     void Start()
     {
+        lineRenderers = FindObjectsOfType<LineRenderer>();
+        if (IsPlaying)
+        {
+            foreach (var item in lineRenderers)
+                item.gameObject.SetActive(false);
+        }
         audioSource = GetComponent<AudioSource>();
         mshBlammo = GameObject.Find("BLAMMO!").GetComponent<MeshRenderer>();
         mshDeathlight = GameObject.Find("DeathLight").GetComponent<MeshRenderer>();
@@ -33,6 +44,10 @@ public class Player : MonoBehaviour
         seconds = 0;
         high = PlayerPrefs.GetInt("HighScore", 0);
         GameObject.Find("Main Menu Canvas").GetComponent<Canvas>().enabled = !IsPlaying;
+        var musicAudioSource = gameObject.AddComponent<AudioSource>();
+        musicAudioSource.clip = IsPlaying ? GameMusic : MenuMusic;
+        musicAudioSource.loop = true;
+        musicAudioSource.Play();
     }
 
     // Update is called once per frame
@@ -48,13 +63,34 @@ public class Player : MonoBehaviour
                 high = seconds;
                 PlayerPrefs.SetInt("HighScore", high);
             }
-            txtTime.text = $"High: {high}\nScore: {seconds}";
+            txtTime.text = $"High: {high}\nYou: {seconds}";
         }
 
-        //if (Input.GetKey(KeyCode.LeftArrow))
-        //    transform.position -= new Vector3(moveSpeed, 0, 0);
-        //if (Input.GetKey(KeyCode.RightArrow))
-        //    transform.position += new Vector3(moveSpeed, 0, 0);
+        var thumbstick = GetThumbstickX(XRNode.LeftHand) + GetThumbstickX(XRNode.RightHand);
+
+        if (Input.GetKey(KeyCode.LeftArrow))
+            transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.RightArrow))
+            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+        
+        if (Mathf.Abs(thumbstick) > 0.1f)
+        {
+            transform.position += Vector3.right * thumbstick * moveSpeed * Time.deltaTime;
+            txtTime.text = $"{thumbstick}, {thumbstick * moveSpeed * Time.deltaTime}, {thumbstick * moveSpeed}";
+        }
+    }
+
+    float GetThumbstickX(XRNode node)
+    {
+        var hands = new List<InputDevice>();
+        InputDevices.GetDevicesAtXRNode(node, hands);
+        foreach (var item in hands)
+        {
+            if (!item.isValid) continue;
+            if (item.TryGetFeatureValue(CommonUsages.primary2DAxis, out var v))
+                return v.x;
+        }
+        return 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,12 +105,35 @@ public class Player : MonoBehaviour
 
     IEnumerator DeathProcedure()
     {
+        IsPlaying = false;
+        Vibrate();
         audioSource.PlayOneShot(DeathSound);
         mshDeathlight.enabled = true;
         mshBlammo.enabled = true;
         mshTime.enabled = false;
         yield return new WaitForSeconds(1);
+
         Restart();
+    }
+
+    void Vibrate()
+    {
+        var nodes = new[] { XRNode.RightHand, XRNode.LeftHand, XRNode.Head };
+        foreach (var node in nodes)
+        {
+            InputDevice device = InputDevices.GetDeviceAtXRNode(node);
+            HapticCapabilities capabilities;
+            if (device.TryGetHapticCapabilities(out capabilities))
+            {
+                if (capabilities.supportsImpulse)
+                {
+                    uint channel = 0;
+                    float amplitude = 0.5f;
+                    float duration = 1.0f;
+                    device.SendHapticImpulse(channel, amplitude, duration);
+                }
+            }
+        }
     }
 
     public void StartGame()

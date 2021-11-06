@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Neat Games
+  companyName: Chilling Moose
   productName: Tree Massacre
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -154,9 +154,9 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.DefaultCompany.com.unity.template.vr
+    Standalone: com.chillingmoose.tree
   buildNumber:
-    Standalone: 0
+    Standalone: 10000
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
@@ -452,10 +452,13 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
+  cameraUsageDescription: The game requires access to the camera to complete this
+    task
   locationUsageDescription: 
-  microphoneUsageDescription: 
-  bluetoothUsageDescription: 
+  microphoneUsageDescription: The game requires access to the microphone to complete
+    this task
+  bluetoothUsageDescription: The game requires access to the bluetooth to complete
+    this task
   switchNMETAOverride: 
   switchNetLibKey: 
   switchSocketMemoryPoolSize: 6144
