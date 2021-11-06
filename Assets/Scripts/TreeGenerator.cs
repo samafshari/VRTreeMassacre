@@ -6,7 +6,7 @@ public class TreeGenerator : MonoBehaviour
 {
     public GameObject[] treePrefabs;
     int initialSpawnCount = 90;
-    float minSpawnTime = 0.1f;
+    float minSpawnTime = 0.05f;
     float maxSpawnTime = 0.5f;
     float amplitude = 50;
     float initZAmplitude = 900;
@@ -24,6 +24,9 @@ public class TreeGenerator : MonoBehaviour
     void Update()
     {
         t += Time.deltaTime;
+        maxSpawnTime -= Time.deltaTime * 0.01f;
+        if (maxSpawnTime < minSpawnTime)
+            maxSpawnTime = minSpawnTime;
         if (t > nextSpawn) Spawn();
     }
 

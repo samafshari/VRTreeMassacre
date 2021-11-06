@@ -13,8 +13,8 @@ public class Player : MonoBehaviour
     public AudioClip MenuMusic;
     public AudioClip GameMusic;
 
-    const float moveRange = 1;
-    float moveSpeed = 0.1f;
+    const float moveRange = 20;
+    float moveSpeed = 2;
     bool isAlive = true;
     AudioSource audioSource;
     MeshRenderer mshBlammo, mshDeathlight, mshTime;
@@ -68,15 +68,19 @@ public class Player : MonoBehaviour
 
         var thumbstick = GetThumbstickX(XRNode.LeftHand) + GetThumbstickX(XRNode.RightHand);
 
-        if (Input.GetKey(KeyCode.LeftArrow))
-            transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.RightArrow))
-            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-        
+        //if (Input.GetKey(KeyCode.LeftArrow))
+        //    transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+        //if (Input.GetKey(KeyCode.RightArrow))
+        //    transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+
         if (Mathf.Abs(thumbstick) > 0.1f)
         {
             transform.position += Vector3.right * thumbstick * moveSpeed * Time.deltaTime;
-            txtTime.text = $"{thumbstick}, {thumbstick * moveSpeed * Time.deltaTime}, {thumbstick * moveSpeed}";
+            if (transform.localPosition.x < -moveRange)
+                transform.localPosition = new Vector3(-moveRange, transform.localPosition.y, transform.localPosition.z);
+            else if (transform.localPosition.x > moveRange)
+                transform.localPosition = new Vector3(moveRange, transform.localPosition.y, transform.localPosition.z);
+            //txtTime.text = $"{thumbstick}, {thumbstick * moveSpeed * Time.deltaTime}, {thumbstick * moveSpeed}";
         }
     }
 
