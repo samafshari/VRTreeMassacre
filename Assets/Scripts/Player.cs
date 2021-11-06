@@ -13,7 +13,7 @@ public class Player : GameController
     public AudioClip MenuMusic;
     public AudioClip GameMusic;
 
-    const float moveRange = 20;
+    const float moveRange = 15;
     float moveSpeed = 2;
     bool isAlive = true;
     AudioSource audioSource;
