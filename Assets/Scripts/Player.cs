@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
-public class Player : MonoBehaviour
+public class Player : GameController
 {
     public static bool IsPlaying;
 
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
             txtTime.text = $"High: {high}\nYou: {seconds}";
         }
 
-        var thumbstick = GetThumbstickX(XRNode.LeftHand) + GetThumbstickX(XRNode.RightHand);
+        var thumbstick = GetThumbstickX();
 
         //if (Input.GetKey(KeyCode.LeftArrow))
         //    transform.position += Vector3.left * moveSpeed * Time.deltaTime;
@@ -84,18 +84,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    float GetThumbstickX(XRNode node)
-    {
-        var hands = new List<InputDevice>();
-        InputDevices.GetDevicesAtXRNode(node, hands);
-        foreach (var item in hands)
-        {
-            if (!item.isValid) continue;
-            if (item.TryGetFeatureValue(CommonUsages.primary2DAxis, out var v))
-                return v.x;
-        }
-        return 0;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -115,29 +103,9 @@ public class Player : MonoBehaviour
         mshDeathlight.enabled = true;
         mshBlammo.enabled = true;
         mshTime.enabled = false;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         Restart();
-    }
-
-    void Vibrate()
-    {
-        var nodes = new[] { XRNode.RightHand, XRNode.LeftHand, XRNode.Head };
-        foreach (var node in nodes)
-        {
-            InputDevice device = InputDevices.GetDeviceAtXRNode(node);
-            HapticCapabilities capabilities;
-            if (device.TryGetHapticCapabilities(out capabilities))
-            {
-                if (capabilities.supportsImpulse)
-                {
-                    uint channel = 0;
-                    float amplitude = 0.5f;
-                    float duration = 1.0f;
-                    device.SendHapticImpulse(channel, amplitude, duration);
-                }
-            }
-        }
     }
 
     public void StartGame()

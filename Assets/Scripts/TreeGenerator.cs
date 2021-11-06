@@ -12,10 +12,14 @@ public class TreeGenerator : MonoBehaviour
     float initZAmplitude = 900;
     float nextSpawn;
     float t;
+    float maxSpeedBoost = 2;
+    float speedBoost = 1;
+    MoveForward terrain;
 
     // Start is called before the first frame update
     void Start()
     {
+        terrain = FindObjectOfType<TerrainController>().GetComponent<MoveForward>();
         for (int i = 0; i < initialSpawnCount; i++)
             Spawn(Random.Range(-initZAmplitude, 0));
     }
@@ -28,6 +32,10 @@ public class TreeGenerator : MonoBehaviour
         if (maxSpawnTime < minSpawnTime)
             maxSpawnTime = minSpawnTime;
         if (t > nextSpawn) Spawn();
+
+        speedBoost += Time.deltaTime * 0.01f;
+        if (speedBoost > maxSpeedBoost)
+            speedBoost = maxSpeedBoost;
     }
 
     void Spawn(float z = 0)
@@ -41,5 +49,9 @@ public class TreeGenerator : MonoBehaviour
             z);
         nextSpawn = Random.Range(minSpawnTime, maxSpawnTime);
         t = 0;
+
+        var tree = instance.GetComponent<MoveForward>();
+        tree.velocity *= speedBoost;
+        terrain.velocity = tree.velocity;
     }
 }
