@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Player : GameController
 {
@@ -25,15 +26,15 @@ public class Player : GameController
     float time;
     int seconds;
     int high;
-    LineRenderer[] lineRenderers;
+    XRInteractorLineVisual[] handLines;
     // Start is called before the first frame update
     void Start()
     {
-        lineRenderers = FindObjectsOfType<LineRenderer>();
+        handLines = FindObjectsOfType<XRInteractorLineVisual>();
         if (IsPlaying)
         {
-            foreach (var item in lineRenderers)
-                item.gameObject.SetActive(false);
+            foreach (var item in handLines)
+                item.enabled = false;
         }
         audioSource = GetComponent<AudioSource>();
         mshBlammo = GameObject.Find("BLAMMO!").GetComponent<MeshRenderer>();
