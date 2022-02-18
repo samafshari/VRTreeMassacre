@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
@@ -53,6 +56,9 @@ public class Player : GameController
     // Update is called once per frame
     void Update()
     {
+        if (Keyboard.current.f12Key.wasPressedThisFrame)
+            ScreenCapture.CaptureScreenshot(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), DateTime.Now.Ticks.ToString() + ".png"));
+
         if (!IsPlaying) return;
         time += Time.deltaTime;
         if ((int)time > seconds)
@@ -67,11 +73,6 @@ public class Player : GameController
         }
 
         var thumbstick = GetThumbstickX();
-
-        //if (Input.GetKey(KeyCode.LeftArrow))
-        //    transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-        //if (Input.GetKey(KeyCode.RightArrow))
-        //    transform.position += Vector3.right * moveSpeed * Time.deltaTime;
 
         if (Mathf.Abs(thumbstick) > 0.1f)
         {

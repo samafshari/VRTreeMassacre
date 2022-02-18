@@ -79,7 +79,6 @@ public class DosGameController : GameController
                 imgTrees.RemoveAt(i--);
                 continue;
             }
-            if (i == 0) Debug.Log(imgTree.transform.localPosition.y);
             imgTree.transform.localPosition += Vector3.down * Time.deltaTime * treeSpeed;
         }
     }
