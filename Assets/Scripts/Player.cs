@@ -74,8 +74,9 @@ public class Player : GameController
         }
 
         var thumbstick = GetThumbstickX();
+        txtTime.text = thumbstick.ToString();
 
-        if (Mathf.Abs(thumbstick) > 0.1f)
+        //if (Mathf.Abs(thumbstick) > 0.05f)
         {
             transform.position += Vector3.right * thumbstick * moveSpeed * Time.deltaTime;
             if (transform.localPosition.x < -moveRange)

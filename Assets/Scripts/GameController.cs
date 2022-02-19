@@ -5,6 +5,8 @@ using UnityEngine.XR;
 
 public class GameController : MonoBehaviour
 {
+    protected SkiPole[] poles;
+
     protected float GetThumbstickX(XRNode node)
     {
         var hands = new List<InputDevice>();
@@ -21,6 +23,16 @@ public class GameController : MonoBehaviour
     protected float GetThumbstickX()
     {
         var thumbstick = GetThumbstickX(XRNode.LeftHand) + GetThumbstickX(XRNode.RightHand);
+
+        if (poles == null)
+            poles = FindObjectsOfType<SkiPole>();
+
+        foreach (var item in poles)
+        {
+            thumbstick -= item.X * 1000.0f;
+            //break;
+        }
+
         return thumbstick;
     }
 
