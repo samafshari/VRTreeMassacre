@@ -29,14 +29,14 @@ public class GameController : MonoBehaviour
 
         foreach (var item in poles)
         {
-            thumbstick -= item.X * 1000.0f;
-            //break;
+            thumbstick -= item.X * 100.0f;
+            break;
         }
 
         return thumbstick;
     }
 
-    protected void Vibrate()
+    protected void Vibrate(float amplitude = 0.5f, float duration = 1.0f)
     {
         var nodes = new[] { XRNode.RightHand, XRNode.LeftHand, XRNode.Head };
         foreach (var node in nodes)
@@ -48,8 +48,6 @@ public class GameController : MonoBehaviour
                 if (capabilities.supportsImpulse)
                 {
                     uint channel = 0;
-                    float amplitude = 0.5f;
-                    float duration = 1.0f;
                     device.SendHapticImpulse(channel, amplitude, duration);
                 }
             }

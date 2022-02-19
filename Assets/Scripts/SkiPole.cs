@@ -1,52 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 
 public class SkiPole : MonoBehaviour
 {
     public bool IsLeft;
 
-    Vector3 previous;
-    public float X { get; private set; }
-    float x0;
+    public const int SampleSize = 10;
+    public const float SampleTime = 0.05f;
 
-    float? minY, maxY;
-    bool waitForReset;
+    Vector3 previous;
+    Vector2[] samples = new Vector2[SampleSize];
+    int pointer;
+    float sampleTimer;
+
+    public float X { get; private set; }
+
 
     // Start is called before the first frame update
     void Start()
     {
         previous = transform.position;
-        x0 = previous.x;
     }
 
     // Update is called once per frame
     void Update()
     {
-        var p = 0.9f * previous + 0.1f * transform.position;
-
-        if (minY == null || p.y < minY) minY = p.y;
-        if (maxY == null || p.y > maxY) maxY = p.y;
-
-        if (!waitForReset || minY == null || maxY == null)
+        var p = transform.position;
+        sampleTimer += Time.deltaTime;
+        if (sampleTimer > SampleTime)
         {
-            if (p.y < previous.y)
-            {
-                // stick moving down
-                //X = Mathf.Sign(p.x - x0);
-                X = 0.5f * X + 0.5f * (p.x - x0);
-            }
-            else
-            {
-                waitForReset = true;
-            }
+            sampleTimer = 0;
+            var d = p - previous;
+            samples[pointer] = d;
+            pointer = (pointer + 1) % samples.Length;
+            previous = p;
         }
-        if (p.y > 0.5f * (minY + maxY))
+
+        if (samples.Count(x => x.y < 0) > SampleSize / 2)
         {
-            waitForReset = false;
-            x0 = p.x;
+            // stick moving down
+            var avg = samples.Select(x => x.x).Average();
+            X = avg;
         }
-        previous = p;
     }
 }
