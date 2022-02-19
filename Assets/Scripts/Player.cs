@@ -30,6 +30,7 @@ public class Player : GameController
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 75;
         handLines = FindObjectsOfType<XRInteractorLineVisual>();
         if (IsPlaying)
         {
@@ -74,7 +75,7 @@ public class Player : GameController
         }
 
         var thumbstick = GetThumbstickX();
-        txtTime.text = thumbstick.ToString();
+        //txtTime.text = thumbstick.ToString();
 
         //if (Mathf.Abs(thumbstick) > 0.05f)
         {

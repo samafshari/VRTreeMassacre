@@ -29,8 +29,7 @@ public class GameController : MonoBehaviour
 
         foreach (var item in poles)
         {
-            thumbstick -= item.X * 100.0f;
-            break;
+            thumbstick -= item.X * 1.0f;
         }
 
         return thumbstick;

@@ -7,7 +7,7 @@ public class TreeGenerator : MonoBehaviour
     public GameObject[] treePrefabs;
     int initialSpawnCount = 90;
     float minSpawnTime = 0.04f;
-    float maxSpawnTime = 0.5f;
+    float maxSpawnTime = 0.3f;
     float amplitude = 50;
     float initZAmplitude = 900;
     float nextSpawn;
