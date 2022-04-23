@@ -61,7 +61,7 @@ public class DosGameController : GameController
 
     void MovePlayer()
     {
-        imgPlayer.transform.localPosition += Vector3.right * direction * playerSpeed * Time.deltaTime;
+        imgPlayer.transform.localPosition += Vector3.right * -direction * playerSpeed * Time.deltaTime;
         if (imgPlayer.transform.localPosition.x < xMin)
             imgPlayer.transform.localPosition = new Vector3(xMin, imgPlayer.transform.localPosition.y);
         else if (imgPlayer.transform.localPosition.x > xMax)
@@ -129,7 +129,7 @@ public class DosGameController : GameController
         else
         {
             imgPlayer.sprite = LeftSprite;
-            if (direction < 0)
+            if (direction > 0)
                 imgPlayer.rectTransform.localScale = Vector3.one;
             else
                 imgPlayer.rectTransform.localScale = new Vector3(-1, 1, 1);
